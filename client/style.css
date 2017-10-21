@@ -1,0 +1,78 @@
+html, body {
+	height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: arial;
+}
+
+body.flex-row > header {
+	flex: 0 0 40px;
+	padding: 20px;
+}
+
+h1 {
+	margin: 0;
+	text-align: center;
+}
+
+.flex-row {
+	flex-direction: column;
+}
+
+.flex-row, .flex-col {
+	display: flex;
+}
+
+.flex-row > *, .flex-col > * {
+	flex: 1 1 0px;
+}
+
+#game-container {
+	background-color: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#game-container #cenario {
+	width: 640px;
+	height: 460px;
+	background-color: white;
+	position: relative;
+	overflow: hidden;
+}
+
+.map-wrapper {
+	position: absolute;
+}
+
+.map-wrapper > .linha {
+	height: 32px;
+	overflow: hidden;
+}
+
+.map-wrapper > .linha > * {
+	height: 32px;
+    width: 32px;
+    float: left;
+    box-sizing: border-box;
+}
+
+.map-wrapper > .linha > .chao {
+	border: 1px solid rgba(93, 93, 93, 0.31);
+}
+
+.map-wrapper > .linha > .prateleira {
+	background-color: brown;
+}
+
+.map-wrapper > .linha > .saida {
+	border: 1px solid rgba(93, 93, 93, 0.31);
+	background-color: rgba(255, 255, 110, 0.51);
+}
+
+#player-info-container {
+	flex: 0 0 275px;
+}
