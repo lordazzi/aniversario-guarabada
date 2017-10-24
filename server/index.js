@@ -262,21 +262,37 @@ var atualizarPosicao = function(comprador, posicao){
 	if (!compradores[xy]) compradores[xy] = [];
 
 	compradores[xy].push(comprador);
-	Object.keys(compradores).forEach((xy) => {
-		compradores[xy].forEach((outroComprador) => {
-			outroComprador.conn.emit('atualizar posição', {
-				id: comprador.id,
-				posicao: comprador.posicao
-			});
-		});
+	server.emit('atualizar posição', {
+		id: comprador.id,
+		posicao: comprador.posicao
 	});
 };
 
-socket(2209).on('connection', (conn) => {
+var getCompradores = function(){
+	var lista = [];
+	Object.keys(compradores).forEach((xy) => {
+		compradores[xy].forEach((outroComprador) => {
+			lista.push({
+				id: outroComprador.id,
+				posicao: outroComprador.posicao,
+				cor: outroComprador.cor,
+				nome: outroComprador.nome
+			});
+		});
+	});
+
+	return lista;
+};
+
+var server = socket(2209);
+server.on('connection', (conn) => {
 	console.info('Nova conexão detectada.');
 
 	var comprador = new Comprador(conn);
-	conn.emit('abrir jogo', mapa);
+	conn.emit('abrir jogo', {
+		mapa,
+		compradores: getCompradores()
+	});
 	conn.on('quem sou eu', (cadastro) => {
 		if (!cadastro.nome) {
 			conn.emit('erro', {
@@ -294,7 +310,17 @@ socket(2209).on('connection', (conn) => {
 
 		comprador.nome = cadastro.nome;
 		comprador.cor = cadastro.cor;
-		conn.emit('este é você', { id: comprador.id });
+		conn.emit('este é você', {
+			id: comprador.id,
+			nome: comprador.nome
+		});
+
+		server.emit('este é alguém', {
+			id: comprador.id,
+			nome: comprador.nome,
+			cor: comprador.cor
+		});
+
 		console.info(`Jogador cadastrado como "${cadastro.nome}".`);
 
 		try {
@@ -339,6 +365,14 @@ socket(2209).on('connection', (conn) => {
 	});
 
 	conn.on('disconnect', () => {
+		var xy = `${comprador.posicao.x}x${comprador.posicao.y}`;
+		if (comprador[xy]) {
+			comprador[xy].splice(comprador[xy].indexOf(comprador), 1);
+			if (!comprador[xy].length) {
+				delete comprador[xy];
+			}
+		}
+		server.emit('morreu', { id: comprador.id });
 		console.info('Jogador desconectou.');
 	});
 });

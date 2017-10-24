@@ -6,8 +6,12 @@
 		<title>Aniversário Guarabada - Comprar ou Morrer</title>
 
 		<script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="assets/plugins/alertifyjs/alertify.min.js"></script>
 		<script type="text/javascript" src="index.js"></script>
+
 		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="assets/plugins/alertifyjs/css/alertify.min.css" />
+		<link rel="stylesheet" type="text/css" href="assets/plugins/alertifyjs/css/alertify.rtl.min.css" />
 	</head>
 	<body class="flex-row">
 		<header>
@@ -21,8 +25,8 @@
 			</div>
 			<div id="player-info-container">
 				<div id="player-info">
-					<h2>Player noname</h2>
-					<div id="lifebar-container">
+					<h2 id="player-nome">Player noname</h2>
+					<div class="lifebar-container">
 						<div class="lifebar">
 							<div class="lifebar-content">500 / 500</div>
 						</div>
